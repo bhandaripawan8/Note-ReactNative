@@ -11,7 +11,7 @@ export const register = async (req, res) =>{
         }
         const otp = Math.floor(Math.random() * 1000000)
 
-        user = await User.create({name, email, password, avatar, otp, otp_expiry:new Date(Date.now() + process.env.OTP-EXPIRE * 60 * 1000)})
+        user = await User.create({name, email, password, avatar:{public_id: "", url: ''}, otp, otp_expiry:new Date(Date.now() + process.env.OTP-EXPIRE * 60 * 1000)})
         await sendMail(email, "verify account", `Your OTP is ${otp}`)
         sendToken(res, user, 200, "OTP sent to your email, please verify your account");
     } catch (error) {
