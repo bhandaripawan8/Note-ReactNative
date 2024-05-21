@@ -1,5 +1,6 @@
 
 import mongoose from "mongoose";
+import jwt from 'jsonwebtoken';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -32,8 +33,17 @@ const userSchema = new mongoose.Schema({
         createdAt: Date
     }],
 
+    verified: {
+        type: Boolean,
+        default: false,
+    },
+
     otp: Number,
     otp_expiry: Date,
 })
+
+userSchema.methods.getJwtToken = function(){
+    return jwt.sign({_id: this._id}, process.env.JWT_SECRET,{expiresIn: process.env.JWT_COOKIE_EXPIRE})
+}
 
 export const User = mongoose.model('User', userSchema)
